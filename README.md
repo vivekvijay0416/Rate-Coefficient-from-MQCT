@@ -18,4 +18,4 @@ To run the analysis, you will need the following Python libraries installed:
 - `tqdm`
 
 ## Usage
-Update the file paths in the `1. CONSTANTS & CONFIGURATION` section of `E_He_MQCT_Rate_Co_effifcient_15.py` to point to your local `USER_INPUT_CHECK.out` and `E_he_Database.dat` files before running the script.
+Update the file paths in the `1. CONSTANTS & CONFIGURATION` section of `E_He_MQCT_Rate_Coefficient_15.py` to point to your local `USER_INPUT_CHECK.out` and `E_he_Database.dat` files before running the script.
