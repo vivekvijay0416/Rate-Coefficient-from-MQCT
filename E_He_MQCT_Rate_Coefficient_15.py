@@ -40,10 +40,10 @@ VISUALIZE_TEMPS = [10, 50, 100, 300] # Must be exactly 4 temperatures from TEMPS
 
 # --- FILE PATHS ---
 # NEW: Added path for the MQCT User Input file to map states properly
-USER_INPUT_PATH = r"C:/Users/4374vijayv/OneDrive - Marquette University/Ethanimine/Ethanimine_E_He/2026/Apr/Cross_Sections_CC/USER_INPUT_CHECK.out"
-DB_FILE_PATH =  r"C:/Users/4374vijayv/OneDrive - Marquette University/Ethanimine/Ethanimine_E_He/2026/Apr/Cross_Sections_CC/E_he_Database.dat"
-OUTPUT_TXT_PATH =rf"C:/Users/4374vijayv/OneDrive - Marquette University/Ethanimine/Ethanimine_E_He/2026/Apr/Cross_Sections_CC/Rate_Coefficients_full_range_hybrid_U_min_40.dat"
-VIZ_SAVE_PATH = rf"C:/Users/4374vijayv/OneDrive - Marquette University/Ethanimine/Ethanimine_E_He/2026/Apr/Cross_Sections_CC/plots_rate_co-eff/full_enr_range_large_A_{EXTRAP_A_MANUAL_VALUE}"
+USER_INPUT_PATH = "USER_INPUT_CHECK.out"
+DB_FILE_PATH = "E_he_Database.dat"
+OUTPUT_TXT_PATH = "Rate_Coefficients_full_range_hybrid_U_min_40.dat"
+VIZ_SAVE_PATH = f"plots_rate_co-eff/full_enr_range_large_A_{EXTRAP_A_MANUAL_VALUE}"
 
 # =================================================================
 # 2. STATE PARSING & MAPPING
@@ -451,9 +451,9 @@ def analyze_saved_rate_differences(hybrid_txt_path, fitted_txt_path, check_temps
         
         title_str = f'Hybrid vs Fitted Rates at T = {T} K'
         if max_ilv is not None:
-            title_str += f'\n(Initial State $\leq$ {max_ilv}  |  $k \geq$ {min_rate:.1E} | A = {EXTRAP_A_MANUAL_VALUE})'
+            title_str += f'\n(Initial State $\\leq$ {max_ilv}  |  $k \\geq$ {min_rate:.1E} | A = {EXTRAP_A_MANUAL_VALUE})'
         else:
-            title_str += f'\n($k \geq$ {min_rate:.1E})'
+            title_str += f'\n($k \\geq$ {min_rate:.1E})'
         plt.title(title_str, fontsize=14)
         
         plt.grid(True, which='both', ls='--', alpha=0.3)
@@ -583,7 +583,7 @@ def compare_with_scaling_law(calc_txt_path, user_input_path, check_temps, min_ra
 def calculate_rates_for_database(db_path, user_input_path, temps, cross_sec_method, rate_method):
     print("Reading Database...")
     cols = ["j_1", "ka_1", "kc_1", "j_2", "ka_2", "kc_2", "E_1", "E_2", "U", "sigmaU_qu", "sigmaU_ex", "E_coll_qu", "sigmaE_qu", "E_coll_ex", "sigmaE_ex", "Tot_DeltaE"]
-    df_raw = pd.read_csv(db_path, delim_whitespace=True, skiprows=1, names=cols)
+    df_raw = pd.read_csv(db_path, sep=r'\s+', skiprows=1, names=cols)
     
     # Map ilv and flv directly using user input
     states_dict = parse_states(user_input_path)
@@ -709,18 +709,18 @@ def export_to_txt(df_rates, output_path, temps):
 # # ===============================================================
 
 
-# if __name__ == "__main__":
+if __name__ == "__main__":
 
-#     # Which transition do you want to plot the detailed 2x3 grid for? (ilv, flv)
-#     # VIZ_TRANSITION = [(17, 12),(18,16),(14,11),(18,11),(10,4)] # bad ones (small)
-#     # VIZ_TRANSITION = [(18, 13),(7,4),(17,14),(16,8),(8,2)] # good ones ones (Large)
-#     VIZ_TRANSITION = [(17, 12),(18,16),(14,11),(18,11),(10,4),(18, 13),(7,4),(17,14),(16,8),(8,2)]
-#     if os.path.exists(DB_FILE_PATH) and os.path.exists(USER_INPUT_PATH):
-#         rate_matrix = calculate_rates_for_database(DB_FILE_PATH, USER_INPUT_PATH, TEMPS, CROSS_SECTION_METHOD, RATE_METHOD)
-#         if not rate_matrix.empty:
-#             export_to_txt(rate_matrix, OUTPUT_TXT_PATH, TEMPS)
-#     else:
-#         print(f"Error: Check paths. DB exists: {os.path.exists(DB_FILE_PATH)}, User Input exists: {os.path.exists(USER_INPUT_PATH)}")
+    # Which transition do you want to plot the detailed 2x3 grid for? (ilv, flv)
+    # VIZ_TRANSITION = [(17, 12),(18,16),(14,11),(18,11),(10,4)] # bad ones (small)
+    # VIZ_TRANSITION = [(18, 13),(7,4),(17,14),(16,8),(8,2)] # good ones ones (Large)
+    VIZ_TRANSITION = [(17, 12),(18,16),(14,11),(18,11),(10,4),(18, 13),(7,4),(17,14),(16,8),(8,2)]
+    if os.path.exists(DB_FILE_PATH) and os.path.exists(USER_INPUT_PATH):
+        rate_matrix = calculate_rates_for_database(DB_FILE_PATH, USER_INPUT_PATH, TEMPS, CROSS_SECTION_METHOD, RATE_METHOD)
+        if not rate_matrix.empty:
+            export_to_txt(rate_matrix, OUTPUT_TXT_PATH, TEMPS)
+    else:
+        print(f"Error: Check paths. DB exists: {os.path.exists(DB_FILE_PATH)}, User Input exists: {os.path.exists(USER_INPUT_PATH)}")
 
 # # =================================================================
 # # 6.2. Analyse Data - Prints Difference in Hybrid and fitted methods
@@ -756,7 +756,7 @@ def export_to_txt(df_rates, output_path, temps):
 if __name__ == "__main__":
     
     # Use the file your script just exported!
-    CALCULATED_FILE = rf"C:/Users/4374vijayv/OneDrive - Marquette University/Ethanimine/Ethanimine_E_He/2026/Apr/Cross_Sections_CC/Rate_Coefficients_full_range_fit_U_min_40.dat"
+    CALCULATED_FILE = OUTPUT_TXT_PATH
     
     TEMPS_TO_CHECK = [10, 50, 100, 300]
     MINIMUM_RATE = 1e-15
